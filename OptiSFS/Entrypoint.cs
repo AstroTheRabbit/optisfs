@@ -4,6 +4,7 @@ using System.Linq;
 using HarmonyLib;
 using ModLoader;
 using SFS.IO;
+using SFS.UI;
 using SFS.World.Drag;
 using UITools;
 using UnityEngine;
@@ -65,6 +66,11 @@ namespace OptiSFS
         public override void Load()
         {
             ANAISLoaded = Loader.main.GetLoadedMods().Any(mod => mod.ModNameID == "ANAIS");
+
+            if (ANAISLoaded)
+            {
+                Debug.LogWarning("[OptiSFS] ANAIS is loaded, disabled the trajectory LOD optimization!");
+            }
         }
     }
 }

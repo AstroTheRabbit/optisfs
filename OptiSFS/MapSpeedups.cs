@@ -60,7 +60,7 @@ namespace OptiSFS
                     {
                         if (alpha > 0f)
                         {
-                            other.textMesh.color = new Color(1f, 1f, 1f, alpha);
+                            other.textMesh.color *= new Color(1f, 1f, 1f, alpha);
                         }
                         else if (other.textMesh.gameObject.activeSelf)
                         {
@@ -76,7 +76,7 @@ namespace OptiSFS
                 {
                     if (alpha > 0f)
                     {
-                        element.textMesh.color = new Color(1f, 1f, 1f, alpha);
+                        element.textMesh.color *= new Color(1f, 1f, 1f, alpha);
                     }
                     else if (element.textMesh.gameObject.activeSelf)
                     {

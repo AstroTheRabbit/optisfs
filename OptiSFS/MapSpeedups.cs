@@ -96,7 +96,7 @@ namespace OptiSFS
 
         public static void ApplyTransparency(List<ElementDrawer.Element> elements)
         {
-            GenericRadixSort.Sort(ref elements, elem => uint.MaxValue - (uint)(elem.priority ^ 0x80000000));
+            //GenericRadixSort.Sort(ref elements, elem => uint.MaxValue - (uint)(elem.priority ^ 0x80000000));
             
             float epsilon = Map.view.ToConstantSize(0.01f);
             
@@ -113,7 +113,9 @@ namespace OptiSFS
         {
             if (!Entrypoint.PatchEnabled)
                 return true;
-
+            if (Entrypoint.ANAISLoaded)
+                return true; // ANAIS breaks down with those optimizations, so we disable them if it's detected
+            
             Vector3[] points = Array.Empty<Vector3>();
             
             if (c.a != 0 && (startAlpha != 0 || endAlpha != 0))

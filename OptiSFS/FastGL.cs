@@ -10,6 +10,8 @@ namespace OptiSFS
         public static void Batched_DrawLines(List<Vector3> starts, List<Vector3> ends, float width, Color color,
             float sortingOrder)
         {
+            bool treat = Entrypoint.TreatmentGroup;
+            
             GL.Begin(GL.QUADS);
             
             new Traverse(GLDrawer.main).Method("GetMaterial", sortingOrder).GetValue<Material>().SetPass(0);
@@ -33,7 +35,8 @@ namespace OptiSFS
                 var start  = starts[i];
                 var end = ends[i];
 
-                if (!LineIntersectsRect(start, end, worldRect, ref corners)) continue;
+                if (!treat && !LineIntersectsRect(start, end, worldRect, ref corners)) continue;
+                //if (treat && )
                 
                 Vector3 vector = Vector2.Perpendicular((start - end).normalized) * width * 0.5f;
                 GL.Vertex(start - vector);
@@ -75,7 +78,7 @@ namespace OptiSFS
         private static bool LinesIntersect(Vector2 A, Vector2 B, Vector2 C, Vector2 D)
         {
             return ccw(A, C, D) != ccw(B, C, D) && ccw(A, B, C) != ccw(A, B, D);
-                
+            
             bool ccw(Vector2 a, Vector2 b, Vector2 c)
             {
                 return (c.y - a.y) * (b.x - a.x) > (b.y - a.y) * (c.x - a.x);
@@ -121,8 +124,8 @@ namespace OptiSFS
                     Vector3 v2 = pos + verts[(i + 1) % resolution];
 
                     GL.Vertex(v0);
-                    GL.Vertex(v1);
                     GL.Vertex(v2);
+                    GL.Vertex(v1);
                 }
             }
 

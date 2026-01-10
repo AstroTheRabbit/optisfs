@@ -6,9 +6,11 @@ using System.Diagnostics;
 using SFS.Cameras;
 using SFS.Parts;
 using SFS.Parts.Modules;
+using SFS;
 using SFS.UI;
 using SFS.World;
 using UnityEngine.SceneManagement;
+using Debug = UnityEngine.Debug;
 
 namespace OptiSFS
 {
@@ -22,7 +24,7 @@ namespace OptiSFS
             if (!Entrypoint.PatchEnabled)
                 return true;
             
-            __result = FastPolygon.FastIntersect(A, B, overlapThreshold);
+            __result = FastPolygon.Intersect(A, B, overlapThreshold);
             
             return false;
         }
@@ -31,35 +33,33 @@ namespace OptiSFS
     [HarmonyPatch(typeof(BuildSelector), "I_GLDrawer.Draw")]
     public static class BuildSelectorDrawPatch
     {
+        private static float? inactiveDepth;
+        private static float? activeDepth;
+        
         [HarmonyPrefix]
         public static bool Prefix(BuildSelector __instance)
         {
             if (!Entrypoint.PatchEnabled)
                 return true;
-
-            List<Part> holdGrid = new List<Part>();
-            List<Part> inactiveGrid = new List<Part>();
+            
             List<Part> activeGrid = new List<Part>();
+            List<Part> inactiveHoldGrid = new List<Part>();
             
             if (!BuildManager.main.buildMenus.stagingMode.Value || !StagingDrawer.main.HasStageSelected())
             {
                 foreach (Part item in __instance.selected)
                 {
-                    if (BuildManager.main.holdGrid.holdGrid.partsHolder.ContainsPart(item))
-                        holdGrid.Add(item);
-                    else if (BuildManager.main.buildGrid.inactiveGrid.partsHolder.ContainsPart(item))
-                        inactiveGrid.Add(item);
-                    else
+                    // Inactive and hold grid have the same depths, only active grid has a different one so we only need to check it
+                    if (BuildManager.main.buildGrid.activeGrid.partsHolder.ContainsPart(item))
                         activeGrid.Add(item);
+                    else
+                        inactiveHoldGrid.Add(item);
                 }
-
-                float depth = __instance.renderSortingManager.GetGlobalDepth(1f, __instance.holdGridLayer);
-                BuildSelector.DrawOutline(holdGrid, false, __instance.outlineColor, __instance.width, depth);
                 
-                depth = __instance.renderSortingManager.GetGlobalDepth(1f, __instance.inactiveBuildGridLayer);
-                BuildSelector.DrawOutline(inactiveGrid, false, __instance.outlineColor, __instance.width, depth);
+                float depth = __instance.renderSortingManager.GetGlobalDepth(1f, __instance.holdGridLayer); // 1
+                BuildSelector.DrawOutline(inactiveHoldGrid, false, __instance.outlineColor, __instance.width, depth);
                 
-                depth = __instance.renderSortingManager.GetGlobalDepth(1f, __instance.activeBuildGridLayer);
+                depth = __instance.renderSortingManager.GetGlobalDepth(1f, __instance.activeBuildGridLayer); // 0.4615385
                 BuildSelector.DrawOutline(activeGrid, false, __instance.outlineColor, __instance.width, depth);
             }
             if (BuildManager.main.symmetryMode)
@@ -85,6 +85,8 @@ namespace OptiSFS
         {
             if (!Entrypoint.PatchEnabled) 
                 return true;
+
+            if (parts.Count == 0) return false;
             
             var cam = ActiveCamera.main.activeCamera.Value.camera;
             float pixelSize = cam.ScreenToWorldPoint(Vector3.right).x - cam.ScreenToWorldPoint(Vector3.zero).x;
@@ -95,6 +97,8 @@ namespace OptiSFS
             starts = new List<Vector3>();
             ends = new List<Vector3>();
             circleCenters = new List<Vector3>();
+
+            Benchmark.ProfileStart(out Stopwatch sw);
             
             foreach (Part part in parts) // This probably can be optimized further by marking blueprint/parts as dirty, but that approach is good enough for now
             {
@@ -130,12 +134,35 @@ namespace OptiSFS
             //MsgDrawer.main.Log(sw.Elapsed.TotalMilliseconds.ToString());
             
             //MsgDrawer.main.Log(pixelSize.ToString());
+
+            float radius = width * 0.5f;
+
+            Benchmark.ProfileEnd("PartLines", sw);
             
-            if (pixelSize < width / 2) 
-                FastGL.Batched_DrawCircles(circleCenters, width * 0.5f, pixelSize >= width / 4 ? 8 : 12, color, depth);
+            if (GetLOD(pixelSize, radius, out int res)) 
+                FastGL.Batched_DrawCircles(circleCenters, radius, res, color, depth);
             FastGL.Batched_DrawLines(starts, ends, width, color, depth);
 
+            if (Entrypoint.DevelopmentMode)
+            {
+                HUD.times["CircLOD"] = res;
+                
+                //if (GetLOD(pixelSize, radius, out _))
+                //    FastGL.Batched_DrawCircles(new List<Vector3>() { Vector3.zero },2f, res, color, depth);
+            }
+            
             return false;
+
+            bool GetLOD(float pixel, float circleRadius, out int resolution)
+            {
+                resolution = 12;
+                if (pixel > circleRadius / 2)
+                    resolution = 4;
+                else if (pixel > circleRadius / 4)
+                    resolution = 8;
+                
+                return pixel <= circleRadius * 2;
+            }
         }
     }
     

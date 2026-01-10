@@ -2,8 +2,10 @@
 using UITools;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using TMPro;
+using UnityEngine.UI;
 
 namespace OptiSFS
 {
@@ -12,44 +14,51 @@ namespace OptiSFS
         private Window win;
         private Label label;
 
-        private int frames = 0;
-        private float lastUpdate = 0;
-        private float fps = 0;
+        private float[] frameTimes = new float[30];
+
+        public static int frameIndex;
 
         public static Dictionary<string, double> times = new Dictionary<string, double>();
+        
+        public static Dictionary<string, int> frameIndexes = new Dictionary<string, int>();
         
         void Start()
         {
             if (!Entrypoint.DevelopmentMode) return;
             
+            Application.runInBackground = true;
+            
             Transform holder = Builder.CreateHolder(Builder.SceneToAttach.BaseScene, "FPS HUD").transform;
             
-            win = Builder.CreateWindow(holder, Builder.GetRandomID(), 360, 480, draggable: true, titleText: "FPS HUD");
-            win.CreateLayoutGroup(Type.Vertical);
+            win = Builder.CreateWindow(holder, Builder.GetRandomID(), 480, 720, draggable: true, titleText: "OptiSFS Benchmark");
+            win.CreateLayoutGroup(Type.Vertical, TextAnchor.UpperCenter, padding: new RectOffset(0, 0, 16, 0));
             win.RegisterPermanentSaving("moe.verdix.optisim_HUD");
+            win.EnableScrolling(Type.Vertical);
             
-            lastUpdate = Time.realtimeSinceStartup;
+            frameTimes[frameIndex % frameTimes.Length] = Time.unscaledDeltaTime;
             
-            label = Builder.CreateLabel(win, 328, 14400, text: "");
+            label = Builder.CreateLabel(win, 420, 2000, text: "");
+            var csf = label.gameObject.GetOrAddComponent<ContentSizeFitter>();
+            csf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            //csf.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+            
+            label.TextAlignment = TextAlignmentOptions.TopLeft;
             label.AutoFontResize = false;
-            label.FontSize *= 0.8f;
-            label.TextAlignment = TextAlignmentOptions.TopJustified;
+            label.FontSize = 32;
         }
 
         void Update()
         {
+            frameIndex++;
+            
             if (!Entrypoint.DevelopmentMode) return;
             
-            frames++;
             if (Input.GetKeyDown(KeyCode.Backslash))
                 Entrypoint.PatchEnabled ^= true;
+            if (Input.GetKeyDown(KeyCode.Home))
+                Entrypoint.TreatmentGroup ^= true;
 
-            if (Time.realtimeSinceStartup - lastUpdate > 0.5)
-            {
-                lastUpdate = Time.realtimeSinceStartup;
-                fps = frames * 2;
-                frames = 0;
-            }
+            frameTimes[frameIndex % frameTimes.Length] = Time.unscaledDeltaTime;
             
             StringBuilder sb = new StringBuilder();
 
@@ -58,7 +67,7 @@ namespace OptiSFS
                 sb.AppendLine($"{key}: {times[key].Round(3)}ms");
             }
             
-            label.Text = $"FPS: {fps}\nPatch {(Entrypoint.PatchEnabled ? "ON" : "OFF")}\n{sb}";
+            label.Text = $"FPS: {frameTimes.Select(dt => 1/(dt == 0 ? 1 : dt)).Average().Round(1)}\nPatch {(Entrypoint.PatchEnabled ? "ON" : "OFF")}\n{sb}";
         }
     }
 }

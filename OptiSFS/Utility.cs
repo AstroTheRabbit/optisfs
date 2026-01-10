@@ -1,48 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using HarmonyLib;
 using SFS.Cameras;
 using UnityEngine;
+using SFS;
+using SFS.Parts;
+using SFS.Parts.Modules;
+using SFS.World;
 
 namespace OptiSFS
 {
-    public struct Circle
-    {
-        public Vector2 center;
-        public float radius;
-
-        public Circle(Vector2 center, float radius)
-        {
-            this.center = center;
-            this.radius = radius;
-        }
-    }
     public static class Utility
     {
         public static int CompareToCultureInvariant(this string a, string b)
         {
             return b == null ? 1 : CultureInfo.InvariantCulture.CompareInfo.Compare(a, b, CompareOptions.None);
-        }
-        
-        public static Circle GetCircle(this ConvexPolygon poly, bool squaredRadius = false)
-        {
-            Vector2 center = Vector2.zero; // actually a centroid, but idgaf, good enough
-            float radiusSq = 0f;
-
-            for (int i = 0; i < poly.points.Length; i++)
-            {
-                center += poly.points[i];
-            }
-            center /= poly.points.Length;
-
-            for (int i = 0; i < poly.points.Length; i++)
-            {
-                radiusSq = Mathf.Max(radiusSq, (center - poly.points[i]).sqrMagnitude);
-            }
-            
-            return new Circle(center, squaredRadius ? radiusSq : Mathf.Sqrt(radiusSq));
         }
 
         public static Rect GetCameraBounds(float z = 0f)

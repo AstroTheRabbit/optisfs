@@ -1,26 +1,35 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using HarmonyLib;
 using SFS.Parts;
 using SFS.Parts.Modules;
+using SFS.UI;
 using SFS.World;
 using SFS.World.Drag;
 using UnityEngine;
 
 namespace OptiSFS
 {
-    [HarmonyPatch(typeof(AeroModule), "SortDragSurfacesByEndX")]
+    //[HarmonyPatch(typeof(AeroModule), "SortDragSurfacesByEndX")]
     public static class SortingPatch
     {
-        [HarmonyPrefix]
-        public static bool Prefix(List<Surface> surfaces)
+        //[HarmonyPrefix]
+        public static bool Prefix(ref List<Surface> surfaces)
         {
-            // Stef has merged the algorithm into vanilla, and it will most likely come in the next update (which I don't know when will happen)
+            //return true;
+            // Stef has merged the algorithm into vanilla 1.6
             if (!Entrypoint.PatchEnabled || Entrypoint.VersionHasRadixSort)
                 return true;
-            
-            SurfaceEndXRadixSort.Sort(ref surfaces);
+
+            var elems = SurfaceEndXRadixSort.Sort(surfaces);
+
+            for (int i = 0; i < surfaces.Count; i++)
+            {
+                surfaces[i] = elems[i];
+            }
             
             //surfaces.Sort((a, b) => a.line.end.x.CompareTo(b.line.end.x));
             return false;
@@ -33,6 +42,7 @@ namespace OptiSFS
         [HarmonyPrefix]
         public static bool Prefix(List<Surface> surfaces)
         {
+            
             if (!Entrypoint.PatchEnabled)
                 return true;
             
@@ -40,6 +50,8 @@ namespace OptiSFS
 
             for (int i = 1; i < surfaces.Count - 1; i++)
             {
+                if (removeIndexes.Contains(i)) continue;
+                
                 Line2 line = surfaces[i].line;
                 float num = line.start.y - surfaces[i - 1].line.end.y;
 
@@ -51,7 +63,7 @@ namespace OptiSFS
                         if (surfaces[num3].line.start.x > num2)
                         {
                             removeIndexes.Add(num3);
-                            i--; // adjust loop to stay aligned
+                            //i--; // adjust loop to stay aligned
                             continue;
                         }
 
@@ -132,6 +144,7 @@ namespace OptiSFS
         [HarmonyPrefix]
         public static bool Prefix(PartHolder partsHolder, Matrix2x2 rotate, ref List<Surface> __result)
         {
+            //return true;
             if (!Entrypoint.PatchEnabled)
                 return true;
             
@@ -149,7 +162,7 @@ namespace OptiSFS
                 }
             }*/
             
-            output.Capacity = modules.Length * 5; // Generally every module has one set of surfaces and on average 5 surfaces in it
+            //output.Capacity = modules.Length; // initial estimate
             
             for (int sdi = 0; sdi < modules.Length; sdi++)
             {   
@@ -159,11 +172,12 @@ namespace OptiSFS
                     continue;
                 
                 Transform t = surfaceData.transform;
-                Vector3 lossyScale = t.lossyScale;
-                bool flip = lossyScale.x > 0f != lossyScale.y > 0f;
+                //Vector3 lossyScale = t.lossyScale;
+                //bool flip = lossyScale.x > 0f != lossyScale.y > 0f;
                 HeatModuleBase heatModule = surfaceData.heatModule;
                 
                 var matrix = t.localToWorldMatrix;
+                bool flip = matrix.determinant < 0f;
                 
                 for (int ind = 0; ind < surfaceData.surfacesFast.Count; ind++)
                 {
@@ -193,6 +207,7 @@ namespace OptiSFS
                         output.Add(new Surface(heatModule, heatModule.valid, new Line2(a, b)));
                 }
             }
+            //MsgDrawer.main.Log($"Expected: {modules.Length * 2} surfaces, got {output.Count}");
             __result = output;
             return false;
         }

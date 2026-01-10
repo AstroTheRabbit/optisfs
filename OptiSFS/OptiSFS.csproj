@@ -12,6 +12,7 @@
         <AssemblyName>OptiSFS</AssemblyName>
         <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,339 +34,27 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
-        <Reference Include="0Harmony">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\0Harmony.dll</HintPath>
-        </Reference>
         <Reference Include="Accessibility">
           <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\Accessibility.dll</HintPath>
         </Reference>
-        <Reference Include="Assembly-CSharp">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\Assembly-CSharp.dll</HintPath>
-        </Reference>
-        <Reference Include="Assembly-CSharp-firstpass">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\Assembly-CSharp-firstpass.dll</HintPath>
-        </Reference>
-        <Reference Include="Clipboard.net">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\Clipboard.net.dll</HintPath>
-        </Reference>
-        <Reference Include="Coffee.SoftMaskForUGUI">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\Coffee.SoftMaskForUGUI.dll</HintPath>
-        </Reference>
-        <Reference Include="Firebase.Analytics">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\Firebase.Analytics.dll</HintPath>
-        </Reference>
-        <Reference Include="Firebase.App">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\Firebase.App.dll</HintPath>
-        </Reference>
-        <Reference Include="Firebase.Platform">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\Firebase.Platform.dll</HintPath>
-        </Reference>
-        <Reference Include="Firebase.RemoteConfig">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\Firebase.RemoteConfig.dll</HintPath>
-        </Reference>
-        <Reference Include="Firebase.TaskExtension">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\Firebase.TaskExtension.dll</HintPath>
-        </Reference>
-        <Reference Include="Google.MiniJson">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\Google.MiniJson.dll</HintPath>
-        </Reference>
-        <Reference Include="ICSharpCode.SharpZipLib">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\ICSharpCode.SharpZipLib.dll</HintPath>
-        </Reference>
-        <Reference Include="Lidgren.Network">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\Lidgren.Network.dll</HintPath>
-        </Reference>
-        <Reference Include="Mono.Cecil">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\Mono.Cecil.dll</HintPath>
-        </Reference>
-        <Reference Include="MonoMod.RuntimeDetour">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\MonoMod.RuntimeDetour.dll</HintPath>
-        </Reference>
-        <Reference Include="MonoMod.Utils">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\MonoMod.Utils.dll</HintPath>
-        </Reference>
         <Reference Include="netstandard">
           <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\netstandard.dll</HintPath>
-        </Reference>
-        <Reference Include="Newtonsoft.Json">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\Newtonsoft.Json.dll</HintPath>
-        </Reference>
-        <Reference Include="Purchasing.Common">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\Purchasing.Common.dll</HintPath>
         </Reference>
         <Reference Include="System"/>
         <Reference Include="System.Core"/>
         <Reference Include="System.Data"/>
         <Reference Include="System.Xml"/>
-        <Reference Include="UITools">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UITools.dll</HintPath>
-        </Reference>
-        <Reference Include="UniTask">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UniTask.dll</HintPath>
-        </Reference>
-        <Reference Include="Unity.Analytics.StandardEvents">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\Unity.Analytics.StandardEvents.dll</HintPath>
-        </Reference>
-        <Reference Include="Unity.Services.Analytics">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\Unity.Services.Analytics.dll</HintPath>
-        </Reference>
-        <Reference Include="Unity.Services.Core">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\Unity.Services.Core.dll</HintPath>
-        </Reference>
-        <Reference Include="Unity.Services.Core.Internal">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\Unity.Services.Core.Internal.dll</HintPath>
-        </Reference>
-        <Reference Include="Unity.Tasks">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\Unity.Tasks.dll</HintPath>
-        </Reference>
-        <Reference Include="Unity.TextMeshPro">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\Unity.TextMeshPro.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.AccessibilityModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.AccessibilityModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.AIModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.AIModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.AndroidJNIModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.AndroidJNIModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.AnimationModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.AnimationModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.ARModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.ARModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.AssetBundleModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.AssetBundleModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.AudioModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.AudioModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.ClothModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.ClothModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.CloudBuild">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.CloudBuild.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.ClusterInputModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.ClusterInputModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.ClusterRendererModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.ClusterRendererModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.ContentLoadModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.ContentLoadModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.CoreModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.CoreModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.CrashReportingModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.CrashReportingModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.DirectorModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.DirectorModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.DSPGraphModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.DSPGraphModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.GameCenterModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.GameCenterModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.GIModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.GIModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.GridModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.GridModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.HotReloadModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.HotReloadModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.ImageConversionModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.ImageConversionModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.IMGUIModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.IMGUIModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.InputLegacyModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.InputLegacyModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.InputModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.InputModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.JSONSerializeModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.JSONSerializeModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.LocalizationModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.LocalizationModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.NVIDIAModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.NVIDIAModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.ParticleSystemModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.ParticleSystemModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.PerformanceReportingModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.PerformanceReportingModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.Physics2DModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.Physics2DModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.PhysicsModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.PhysicsModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.ProfilerModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.ProfilerModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.PropertiesModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.PropertiesModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.Purchasing">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.Purchasing.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.Purchasing.AppleCore">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.Purchasing.AppleCore.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.Purchasing.AppleMacosStub">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.Purchasing.AppleMacosStub.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.Purchasing.AppleStub">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.Purchasing.AppleStub.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.Purchasing.Codeless">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.Purchasing.Codeless.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.Purchasing.SecurityCore">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.Purchasing.SecurityCore.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.Purchasing.SecurityStub">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.Purchasing.SecurityStub.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.Purchasing.Stores">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.Purchasing.Stores.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.Purchasing.WinRTCore">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.Purchasing.WinRTCore.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.Purchasing.WinRTStub">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.Purchasing.WinRTStub.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.ScreenCaptureModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.ScreenCaptureModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.SharedInternalsModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.SharedInternalsModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.SpriteMaskModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.SpriteMaskModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.SpriteShapeModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.SpriteShapeModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.StreamingModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.StreamingModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.SubstanceModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.SubstanceModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.SubsystemsModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.SubsystemsModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.TerrainModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.TerrainModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.TerrainPhysicsModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.TerrainPhysicsModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.TextCoreFontEngineModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.TextCoreFontEngineModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.TextCoreTextEngineModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.TextCoreTextEngineModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.TextRenderingModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.TextRenderingModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.TilemapModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.TilemapModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.TLSModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.TLSModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.UI">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.UI.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.UIElementsModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.UIElementsModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.UIModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.UIModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.UmbraModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.UmbraModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.UnityAnalyticsCommonModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.UnityAnalyticsCommonModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.UnityAnalyticsModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.UnityAnalyticsModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.UnityConnectModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.UnityConnectModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.UnityCurlModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.UnityCurlModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.UnityTestProtocolModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.UnityTestProtocolModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.UnityWebRequestAssetBundleModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.UnityWebRequestAssetBundleModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.UnityWebRequestAudioModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.UnityWebRequestModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.UnityWebRequestModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.UnityWebRequestTextureModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.UnityWebRequestTextureModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.UnityWebRequestWWWModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.VehiclesModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.VehiclesModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.VFXModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.VFXModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.VideoModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.VideoModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.VirtualTexturingModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.VirtualTexturingModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.VRModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.VRModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.WindModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.WindModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.XRModule">
-          <HintPath>..\..\..\source\repos\Other Files\Game Dependencies\UnityEngine.XRModule.dll</HintPath>
+        <Reference Include="../../Other Files/Game Dependencies/*">
+            <HintPath>../../Other Files/Game Dependencies/*.dll</HintPath>
         </Reference>
     </ItemGroup>
     <ItemGroup>
         <Compile Include="AeroModulePatches.cs" />
         <Compile Include="Benchmark.cs" />
         <Compile Include="BuildOptimizations.cs" />
+        <Compile Include="Circle.cs" />
+        <Compile Include="DockingPort.cs" />
+        <Compile Include="EngineModuleOpti.cs" />
         <Compile Include="FastGL.cs" />
         <Compile Include="FastPolygonIntersect.cs" />
         <Compile Include="MapSpeedups.cs" />
@@ -373,6 +62,7 @@
         <Compile Include="HUD.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
         <Compile Include="RadixSort.cs" />
+        <Compile Include="RocketPatches.cs" />
         <Compile Include="Utility.cs" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>

@@ -19,13 +19,17 @@ namespace OptiSFS
     [HarmonyPatch(typeof(Rocket))]
     public static class RocketPatches
     {
-        public static MethodInfo getIsOnSurface = AccessTools.Method(typeof(Rocket), "get_IsOnSurface");
-        
         [HarmonyPatch("ApplyTorque")]
         [HarmonyPrefix]
-        public static bool ApplyTorque(Rocket __instance)
+        public static void ApplyTorque(Rocket __instance, ref bool __runOriginal)
         {
-            if (!Entrypoint.PatchEnabled) return true;
+            if (!__runOriginal)
+                return;
+            
+            if (!Entrypoint.PatchEnabled)
+                return;
+
+            __runOriginal = false;
             
             var rb2d = __instance.rb2d;
             var arrowkeys = __instance.arrowkeys;
@@ -36,64 +40,22 @@ namespace OptiSFS
             if (Mathf.Abs(arrowkeys.turnAxis.Value) < 0.000001f && Mathf.Abs(rb2d.angularVelocity) < 0.0001f)
             {
                 output_TurnAxisTorque.Value = 0f;
-                return false;
+                return;
             }
             
-            float num = GetTorque();
+            float num = __instance.GetTorque();
             
             if (rb2d.mass > 200f)
             {
                 num /= Mathf.Pow(rb2d.mass / 200f, 0.35f);
             }
             
-            output_TurnAxisTorque.Value = GetTurnAxis(num, useStopRotation: true);
+            output_TurnAxisTorque.Value = __instance.GetTurnAxis(num, true);
             
             if (output_TurnAxisTorque.Value != 0f && rb2d.simulated)
             {
                 rb2d.angularVelocity -= num * 57.29578f / rb2d.mass * output_TurnAxisTorque.Value * Time.fixedDeltaTime;
             }
-            
-
-            return false;
-
-            float GetTorque()
-            {
-                float torque = 0f;
-                TorqueModule[] modules = __instance.partHolder.GetModules<TorqueModule>();
-                foreach (TorqueModule torqueModule in modules)
-                {
-                    if (torqueModule.enabled.Local || torqueModule.enabled.Value)
-                    {
-                        torque += torqueModule.torque.Value;
-                    }
-                }
-                return torque;
-            }
-            
-            float GetTurnAxis(float torque, bool useStopRotation)
-            {
-                if ((float)arrowkeys.turnAxis != 0f)
-                {
-                    return arrowkeys.turnAxis;
-                }
-                if (useStopRotation && (bool)__instance.hasControl && !(bool)getIsOnSurface.Invoke(__instance, Array.Empty<object>()))
-                {
-                    return GetStopRotationTurnAxis(torque) * (__instance.floating ? 0.1f : 1f);
-                }
-                return 0f;
-            }
-            
-            float GetStopRotationTurnAxis(float torque)
-            {
-                float angularVelocity = rb2d.angularVelocity;
-                float n = torque * 57.29578f / rb2d.mass * Time.fixedDeltaTime;
-                if (num == 0f)
-                {
-                    return 0f;
-                }
-                return Mathf.Clamp(angularVelocity / n, -1f, 1f);
-            }
-
         }
 
         [HarmonyPatch("UpdateMapIconRotation")]
@@ -153,5 +115,17 @@ namespace OptiSFS
             
             return code.AsEnumerable();
         }
+    }
+
+    public static class PrivateMethods
+    {
+        private static readonly MethodInfo info_GetTorque = AccessTools.Method(typeof(Rocket), "GetTorque");
+        private static readonly MethodInfo info_GetTurnAxis = AccessTools.Method(typeof(Rocket), "GetTurnAxis");
+        
+        private static readonly Func<Rocket, float> func_GetTorque = AccessTools.MethodDelegate<Func<Rocket, float>>(info_GetTorque);
+        private static readonly Func<Rocket, float, bool, float> func_GetTurnAxis = AccessTools.MethodDelegate<Func<Rocket, float, bool, float>>(info_GetTurnAxis);
+
+        public static float GetTorque(this Rocket rocket) => func_GetTorque(rocket);
+        public static float GetTurnAxis(this Rocket rocket, float torque, bool useStopRotation) => func_GetTurnAxis(rocket, torque, useStopRotation);
     }
 }

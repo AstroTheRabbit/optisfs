@@ -12,8 +12,7 @@ using UnityEngine.SceneManagement;
 
 namespace OptiSFS
 {
-    [HarmonyPatch(typeof(Polygon), nameof(Polygon.Intersect), typeof(ConvexPolygon[]), typeof(ConvexPolygon[]),
-        typeof(float))]
+    [HarmonyPatch(typeof(Polygon), nameof(Polygon.Intersect), typeof(ConvexPolygon[]), typeof(ConvexPolygon[]), typeof(float))]
     public static class PolygonIntersectPatch
     {
         [HarmonyPrefix]
@@ -79,14 +78,20 @@ namespace OptiSFS
         
         
         [HarmonyPrefix]
-        public static bool Prefix(List<Part> parts, bool symmetry, Color color, float width, float depth = 1f)
+        public static void Prefix(ref bool __runOriginal, List<Part> parts, bool symmetry, Color color, float width, float depth = 1f)
         {
-            if (!Entrypoint.PatchEnabled) 
-                return true;
-
-            if (parts.Count == 0) return false;
+            if (!__runOriginal)
+                return;
             
-            var cam = ActiveCamera.main.activeCamera.Value.camera;
+            if (!Entrypoint.PatchEnabled)
+                return;
+            
+            __runOriginal = false;
+
+            if (parts.Count == 0)
+                return;
+            
+            Camera cam = ActiveCamera.main.activeCamera.Value.camera;
             float pixelSize = cam.ScreenToWorldPoint(Vector3.right).x - cam.ScreenToWorldPoint(Vector3.zero).x;
             
             
@@ -104,14 +109,14 @@ namespace OptiSFS
                 {
                     if (!poly.Click) continue;
 
-                    var verts = poly.polygon.GetVerticesWorld(poly.transform);
+                    Vector2[] verts = poly.polygon.GetVerticesWorld(poly.transform);
                     
                     float num = BuildManager.main.buildGrid.gridSize.centerX * 2f;
                     
                     for (int i = 0; i < verts.Length; i++)
                     {
-                        var st = verts[i];
-                        var en = verts[(i + 1) % verts.Length];
+                        Vector2 st = verts[i];
+                        Vector2 en = verts[(i + 1) % verts.Length];
                         
                         if (symmetry)
                         {
@@ -148,8 +153,8 @@ namespace OptiSFS
                 //if (GetLOD(pixelSize, radius, out _))
                 //    FastGL.Batched_DrawCircles(new List<Vector3>() { Vector3.zero },2f, res, color, depth);
             }
-            
-            return false;
+
+            return;
 
             bool GetLOD(float pixel, float circleRadius, out int resolution)
             {

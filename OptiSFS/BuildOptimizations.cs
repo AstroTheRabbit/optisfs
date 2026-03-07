@@ -1,16 +1,14 @@
-﻿using HarmonyLib;
-using SFS.Builds;
-using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
+using HarmonyLib;
+using SFS;
+using SFS.Builds;
 using SFS.Cameras;
 using SFS.Parts;
 using SFS.Parts.Modules;
-using SFS;
-using SFS.UI;
 using SFS.World;
+using UnityEngine;
 using UnityEngine.SceneManagement;
-using Debug = UnityEngine.Debug;
 
 namespace OptiSFS
 {

@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using HarmonyLib;
+﻿using System.Globalization;
 using SFS.Cameras;
 using UnityEngine;
-using SFS;
-using SFS.Parts;
-using SFS.Parts.Modules;
-using SFS.World;
 
 namespace OptiSFS
 {

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using SFS;
-using UnityEngine;
+﻿using SFS;
 
 namespace OptiSFS
 {

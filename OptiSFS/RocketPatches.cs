@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Runtime.CompilerServices;
 using HarmonyLib;
-using Mono.Cecil.Cil;
 using SFS.Parts;
 using SFS.Parts.Modules;
-using SFS.UI;
+using SFS.Variables;
 using SFS.World;
 using SFS.World.Maps;
 using UnityEngine;
@@ -31,30 +29,30 @@ namespace OptiSFS
 
             __runOriginal = false;
             
-            var rb2d = __instance.rb2d;
-            var arrowkeys = __instance.arrowkeys;
+            Rigidbody2D rb2d = __instance.rb2d;
+            Arrowkeys arrowkeys = __instance.arrowkeys;
             
-            var output_TurnAxisTorque = __instance.output_TurnAxisTorque;
+            Float_Local output_turnAxisTorque = __instance.output_TurnAxisTorque;
             __instance.output_TurnAxisWheels.Value = arrowkeys.turnAxis;
             
             if (Mathf.Abs(arrowkeys.turnAxis.Value) < 0.000001f && Mathf.Abs(rb2d.angularVelocity) < 0.0001f)
             {
-                output_TurnAxisTorque.Value = 0f;
+                output_turnAxisTorque.Value = 0f;
                 return;
             }
             
-            float num = __instance.GetTorque();
+            float torque = __instance.GetTorque();
             
             if (rb2d.mass > 200f)
             {
-                num /= Mathf.Pow(rb2d.mass / 200f, 0.35f);
+                torque /= Mathf.Pow(rb2d.mass / 200f, 0.35f);
             }
             
-            output_TurnAxisTorque.Value = __instance.GetTurnAxis(num, true);
+            output_turnAxisTorque.Value = __instance.GetTurnAxis(torque, true);
             
-            if (output_TurnAxisTorque.Value != 0f && rb2d.simulated)
+            if (output_turnAxisTorque.Value != 0f && rb2d.simulated)
             {
-                rb2d.angularVelocity -= num * 57.29578f / rb2d.mass * output_TurnAxisTorque.Value * Time.fixedDeltaTime;
+                rb2d.angularVelocity -= torque * 57.29578f / rb2d.mass * output_turnAxisTorque.Value * Time.fixedDeltaTime;
             }
         }
 
@@ -96,11 +94,11 @@ namespace OptiSFS
         [HarmonyTranspiler]
         public static IEnumerable<CodeInstruction> FixedUpdate(IEnumerable<CodeInstruction> instructions, ILGenerator il)
         {
-            var code = instructions.ToList();
+            List<CodeInstruction> code = instructions.ToList();
 
             Label continueLabel = il.DefineLabel();
             
-            code.InsertRange(code.Count - 4, new CodeInstruction[]
+            code.InsertRange(code.Count - 4, new[]
             {
                 new CodeInstruction(OpCodes.Ldsfld, AccessTools.Field(typeof(Entrypoint), "PatchEnabled")),
                 new CodeInstruction(OpCodes.Brfalse_S, continueLabel),
@@ -110,7 +108,7 @@ namespace OptiSFS
                 new CodeInstruction(OpCodes.Ldc_I4_0),
                 new CodeInstruction(OpCodes.Bgt, continueLabel),
                 new CodeInstruction(OpCodes.Ret),
-                new CodeInstruction(OpCodes.Nop) { labels = new List<Label>() { continueLabel }}
+                new CodeInstruction(OpCodes.Nop) { labels = new List<Label> { continueLabel }},
             });
             
             return code.AsEnumerable();

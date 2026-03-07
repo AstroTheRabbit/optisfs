@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using HarmonyLib;
 using ModLoader;
 using SFS.IO;
-using SFS.UI;
 using SFS.World.Drag;
 using UITools;
 using UnityEngine;
